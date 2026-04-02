@@ -18,7 +18,7 @@ const ClaimResult = ({ direction }) => {
   const fetchClaims = async () => {
     try {
       const res = await axios.get(
-        `${API}/api/claims`,
+        `${API}/claims`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }

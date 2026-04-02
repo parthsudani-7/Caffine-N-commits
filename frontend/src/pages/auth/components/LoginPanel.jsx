@@ -12,14 +12,13 @@ const LoginPanel = ({
   handleVerifyOTP,
   onLoginSuccess,
 }) => {
-  // 🔥 HANDLE VERIFY + REDIRECT FLOW
+
   const handleVerify = async () => {
     try {
       const userData = await handleVerifyOTP();
 
-      console.log("VERIFY RESPONSE:", userData); // ✅ DEBUG
+      console.log("VERIFY RESPONSE:", userData);
 
-      // ✅ Ensure valid response before redirect
       if (userData && userData.token) {
         if (onLoginSuccess) {
           onLoginSuccess(userData);
@@ -54,7 +53,13 @@ const LoginPanel = ({
           />
 
           <button
-            onClick={handleSendOTP}
+            onClick={async () => {
+              try {
+                await handleSendOTP(); // ✅ WAIT for API
+              } catch (err) {
+                console.error(err);
+              }
+            }}
             className="bg-[#00B8A0] px-6 py-2 rounded text-black font-medium hover:scale-105 transition"
           >
             {loading ? "Sending..." : "Send OTP"}

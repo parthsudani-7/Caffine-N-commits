@@ -34,11 +34,13 @@ const PolicyManagement = ({ direction }) => {
   const fetchPolicies = async () => {
     try {
       const res = await axios.get(
-        `${API}/api/policies`,
+        `${API}/policies`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setPolicies(res.data.policies || []);
-    } catch {}
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -49,23 +51,23 @@ const PolicyManagement = ({ direction }) => {
   }, [token]);
 
   const handleCancel = async (id) => {
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    await axios.put(
-      `${API}/api/policies/cancel/${id}`,
-      {},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+      await axios.put(
+        `${API}/policies/cancel/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    showToast("❌ Policy Cancelled");
-
-    await fetchPolicies();
-  } catch {
-    showToast("Error cancelling policy");
-  }
-  setLoading(false);
-};
+      showToast("❌ Policy Cancelled");
+      await fetchPolicies();
+    } catch (err) {
+      console.error(err);
+      showToast("Error cancelling policy");
+    }
+    setLoading(false);
+  };
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString("en-IN", {

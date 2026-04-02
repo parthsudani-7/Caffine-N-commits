@@ -63,19 +63,20 @@ const Dashboard = ({ direction }) => {
 
         const location = await getUserLocation();
 
+        // ✅ FIXED URLS (REMOVED /api)
         const weatherRes = await axios.post(
-          `${API}/api/dashboard/weather`,
+          `${API}/dashboard/weather`,
           { lat: location.lat, lon: location.lon },
           { headers }
         );
 
         const riskRes = await axios.get(
-          `${API}/api/dashboard/risk?lat=${location.lat}&lon=${location.lon}`,
+          `${API}/dashboard/risk?lat=${location.lat}&lon=${location.lon}`,
           { headers }
         );
 
         const policyRes = await axios.get(
-          `${API}/api/policies`,
+          `${API}/policies`,
           { headers }
         );
 
@@ -91,7 +92,8 @@ const Dashboard = ({ direction }) => {
         if (riskRes.data.weatherType === "Rain") newAlerts.push("🌧 Rain may affect deliveries");
         setAlerts(newAlerts);
 
-      } catch {
+      } catch (err) {
+        console.error(err);
         setError("Failed to load dashboard data");
       }
     };

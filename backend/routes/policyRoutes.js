@@ -1,4 +1,3 @@
-
 const express = require("express");
 const Policy = require("../models/Policy");
 const { protect } = require("../middleware/authMiddleware");
@@ -6,12 +5,10 @@ const axios = require("axios");
 
 const router = express.Router();
 
-// 🔢 GENERATE POLICY NUMBER
 const generatePolicyNumber = () => {
   return "POL" + Date.now();
 };
 
-// 📍 GET USER LOCATION FROM BODY OR DEFAULT
 const getLocation = (req) => {
   const { lat, lon } = req.body;
   return {
@@ -20,11 +17,10 @@ const getLocation = (req) => {
   };
 };
 
-// 🌦️ GET REAL-TIME RISK FROM WEATHER API
 const getRiskFromBackend = async (lat, lon, token) => {
   try {
     const res = await axios.get(
-      `${API}/api/dashboard/risk?lat=${lat}&lon=${lon}`,
+      `${API}/dashboard/risk?lat=${lat}&lon=${lon}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -35,11 +31,10 @@ const getRiskFromBackend = async (lat, lon, token) => {
     return res.data.riskScore;
   } catch (err) {
     console.log("⚠️ Risk fetch failed, fallback used");
-    return 50; // fallback risk
+    return 50;
   }
 };
 
-// 🧠 CREATE POLICY (Dynamic Pricing + LIVE RISK)
 router.post("/create", protect, async (req, res) => {
   try {
     const { type, basePrice, coverage } = req.body;
@@ -54,16 +49,13 @@ router.post("/create", protect, async (req, res) => {
 
     const { lat, lon } = getLocation(req);
 
-    // 🔥 GET LIVE RISK
     const riskScore = await getRiskFromBackend(
       lat,
       lon,
       req.headers.authorization.split(" ")[1]
     );
 
-    // 💰 DYNAMIC PRICING
-    const multiplier = 1 + riskScore / 100;
-    const premium = Math.round(basePrice * multiplier);
+    const premium = basePrice;
 
     const policy = new Policy({
       user: userId,
@@ -88,7 +80,6 @@ router.post("/create", protect, async (req, res) => {
   }
 });
 
-// 📜 GET ALL USER POLICIES
 router.get("/", protect, async (req, res) => {
   try {
     const userId = req.user._id;
@@ -107,7 +98,6 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
-// ❌ CANCEL POLICY
 router.put("/cancel/:id", protect, async (req, res) => {
   try {
     const policy = await Policy.findById(req.params.id);
@@ -138,7 +128,6 @@ router.put("/cancel/:id", protect, async (req, res) => {
   }
 });
 
-// 🔼 UPGRADE POLICY (REAL BACKEND LOGIC)
 router.put("/upgrade/:id", protect, async (req, res) => {
   try {
     const policy = await Policy.findById(req.params.id);
@@ -157,17 +146,14 @@ router.put("/upgrade/:id", protect, async (req, res) => {
 
     const { lat, lon } = getLocation(req);
 
-    // 🔥 GET NEW RISK
     const riskScore = await getRiskFromBackend(
       lat,
       lon,
       req.headers.authorization.split(" ")[1]
     );
 
-    // 🔼 UPGRADE LOGIC
     const newCoverage = policy.coverage + 5000;
-    const multiplier = 1 + riskScore / 100;
-    const newPremium = Math.round(policy.basePrice * multiplier);
+    const newPremium = policy.basePrice;
 
     policy.coverage = newCoverage;
     policy.premium = newPremium;

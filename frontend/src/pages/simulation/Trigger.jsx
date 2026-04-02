@@ -49,13 +49,13 @@ try {
 const loc = await getLocation();
 
 const weatherRes = await axios.post(
-`${API}/api/dashboard/weather`,
+`${API}/dashboard/weather`,
 { lat: loc.lat, lon: loc.lon },
 { headers: { Authorization: `Bearer ${token}` } }
 );
 
 const riskRes = await axios.get(
-`${API}/api/dashboard/risk?lat=${loc.lat}&lon=${loc.lon}`,
+`${API}/dashboard/risk?lat=${loc.lat}&lon=${loc.lon}`,
 { headers: { Authorization: `Bearer ${token}` } }
 );
 

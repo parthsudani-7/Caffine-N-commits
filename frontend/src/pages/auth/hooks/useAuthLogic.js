@@ -1,34 +1,33 @@
 import API from "@/config/api";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 
 const useAuthLogic = () => {
 
-  // 🔁 TOGGLE
   const [isLogin, setIsLogin] = useState(true);
 
-  // 🔐 LOGIN STATES
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState("PHONE");
 
-  // 🆕 SIGNUP STATES
   const [name, setName] = useState("");
   const [signupPhone, setSignupPhone] = useState("");
   const [signupOtp, setSignupOtp] = useState("");
   const [signupStep, setSignupStep] = useState("PHONE");
 
-  // 🆕 EXTRA SIGNUP DATA
   const [platform, setPlatform] = useState("Blinkit");
   const [zone, setZone] = useState("");
 
-  // ⚙️ COMMON STATES
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login, user } = useAuth();
+  const { login } = useAuth();
+
+  // =========================
+  // 🔐 LOGIN FLOW
+  // =========================
+
   const handleSendOTP = async () => {
     setError("");
 
@@ -40,70 +39,67 @@ const useAuthLogic = () => {
     setLoading(true);
 
     try {
-  const res = await axios.post(`${API}/api/auth/send-otp`, {
-  phone,
-  type: "login",
-});
+      const res = await axios.post(`${API}/auth/send-otp`, {
+        phone,
+        type: "login",
+      });
 
-setError(`OTP (Demo): ${res.data.otp}`); // 🔥 SHOW IN UI
+      console.log("OTP RESPONSE:", res.data);
 
-  setStep("OTP");
+      setError(`OTP (Demo): ${res.data.otp}`);
+      setStep("OTP");
 
-} catch (err) {
-  const msg = err.response?.data?.error;
+    } catch (err) {
+      const msg = err.response?.data?.error;
 
-  if (msg === "User not found. Please sign up.") {
-    setIsLogin(false);               // 🔥 SWITCH TO SIGNUP
-    setSignupPhone(phone);           // 🔥 PASS PHONE
-    setSignupStep("PHONE");
-  }
+      if (msg === "User not found. Please sign up.") {
+        setIsLogin(false);
+        setSignupPhone(phone);
+        setSignupStep("PHONE");
+      }
 
-  setError(msg || "Something went wrong");
-}
-
-    setLoading(false);
+      setError(msg || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
-const handleVerifyOTP = async () => {
-  setError("");
-  setLoading(true);
+  const handleVerifyOTP = async () => {
+    setError("");
+    setLoading(true);
 
-  try {
-    const res = await axios.post(
-      `${API}/api/auth/verify-otp`,
-      {
+    try {
+      const res = await axios.post(`${API}/auth/verify-otp`, {
         phone,
         otp,
         type: "login",
+      });
+
+      const data = res.data;
+
+      console.log("VERIFY RESPONSE:", data);
+
+      // ✅ IMPORTANT FIX (no dependency on success flag)
+      if (data && data.token) {
+        const userData = {
+          ...data.user,
+          token: data.token,
+        };
+
+        login(userData);
+        return userData;
+      } else {
+        setError("Invalid OTP");
+        return null;
       }
-    );
 
-    const data = res.data;
-
-    if (data.success) {
-      const userData = {
-        ...data.user,
-        token: data.token,
-      };
-
-      // ✅ SAVE USER
-      login(userData);
-
-      // 🔥 IMPORTANT: RETURN DATA (NOT navigate)
-      return userData;
-
-    } else {
-      setError("Invalid OTP");
+    } catch (err) {
+      setError(err.response?.data?.error || "Verification failed");
       return null;
+    } finally {
+      setLoading(false);
     }
-
-  } catch (err) {
-    setError(err.response?.data?.error || "Verification failed");
-    return null;
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   // =========================
   // 🆕 SIGNUP FLOW
@@ -120,28 +116,29 @@ const handleVerifyOTP = async () => {
     setLoading(true);
 
     try {
-    const res = await axios.post(`${API}/api/auth/send-otp`, {
-    phone: signupPhone,
-    type: "signup",
-    });
+      const res = await axios.post(`${API}/auth/send-otp`, {
+        phone: signupPhone,
+        type: "signup",
+      });
 
-    setError(`OTP (Demo): ${res.data.otp}`); // 🔥 SHOW IN UI
+      console.log("SIGNUP OTP RESPONSE:", res.data);
 
-  setSignupStep("OTP");
+      setError(`OTP (Demo): ${res.data.otp}`);
+      setSignupStep("OTP");
 
-} catch (err) {
-  const msg = err.response?.data?.error;
+    } catch (err) {
+      const msg = err.response?.data?.error;
 
-  if (msg === "User already exists. Please login.") {
-    setIsLogin(true);              // 🔥 SWITCH TO LOGIN
-    setPhone(signupPhone);         // 🔥 PASS PHONE
-    setStep("PHONE");
-  }
+      if (msg === "User already exists. Please login.") {
+        setIsLogin(true);
+        setPhone(signupPhone);
+        setStep("PHONE");
+      }
 
-  setError(msg || "Something went wrong");
-}
-
-    setLoading(false);
+      setError(msg || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSignupVerifyOTP = async () => {
@@ -149,81 +146,68 @@ const handleVerifyOTP = async () => {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        `${API}/api/auth/verify-otp`,
-        {
-          phone: signupPhone,
-          otp: signupOtp,
-          type: "signup", // 🔥 IMPORTANT
-        }
-      );
+      const res = await axios.post(`${API}/auth/verify-otp`, {
+        phone: signupPhone,
+        otp: signupOtp,
+        type: "signup",
+      });
 
       const data = res.data;
 
-      if (data.success) {
-        setSignupStep("VERIFIED");   // ✅ ONLY move to form
+      console.log("SIGNUP VERIFY RESPONSE:", data);
+
+      if (data && data.message) {
+        setSignupStep("VERIFIED");
       } else {
         setError("Invalid OTP");
       }
+
     } catch (err) {
       setError(err.response?.data?.error || "Verification failed");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const handleSignup = async () => {
-  setError("");
+    setError("");
 
-  if (!name || !signupPhone || !zone) {
-    setError("Fill all fields");
-    return;
-  }
+    if (!name || !signupPhone || !zone) {
+      setError("Fill all fields");
+      return;
+    }
 
-  try {
-    const res = await axios.post(
-      `${API}/api/auth/complete-profile`,
-      {
+    try {
+      const res = await axios.post(`${API}/auth/complete-profile`, {
         phone: signupPhone,
         name,
         platform,
         zone,
-      }
-    );
+      });
 
-    const userData = {
+      const userData = {
         ...res.data.user,
-        token: res.data.token, // 🔥 IMPORTANT
+        token: res.data.token,
       };
 
       login(userData);
-
-      // 🔥 RETURN DATA (LIKE LOGIN FLOW)
       return userData;
 
-  } catch (err) {
-    setError(err.response?.data?.error || "Signup failed");
-  }
-};
-
-  // =========================
-  // 📦 RETURN ALL
-  // =========================
+    } catch (err) {
+      setError(err.response?.data?.error || "Signup failed");
+    }
+  };
 
   return {
-
-    // toggle
     isLogin,
     setIsLogin,
 
-    // login
     phone,
     setPhone,
     otp,
     setOtp,
     step,
 
-    // signup
     name,
     setName,
     signupPhone,
@@ -236,11 +220,9 @@ const handleVerifyOTP = async () => {
     zone,
     setZone,
 
-    // states
     loading,
     error,
 
-    // handlers
     handleSendOTP,
     handleVerifyOTP,
     handleSignupSendOTP,
