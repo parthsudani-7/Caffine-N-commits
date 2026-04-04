@@ -6,8 +6,6 @@ import { useAuth } from "../context/AuthContext";
 
 export const useDashboard = () => {
   const navigate = useNavigate();
-
-  // ✅ FIXED AUTH (no try-catch)
   const { user } = useAuth();
 
   const [risk, setRisk] = useState(50);
@@ -19,7 +17,6 @@ export const useDashboard = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [riskHistory, setRiskHistory] = useState([]);
 
-  // 👋 GREETING
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
@@ -27,7 +24,6 @@ export const useDashboard = () => {
     return "Good Evening";
   };
 
-  // 📍 LOCATION
   useEffect(() => {
     let timeout = setTimeout(() => {
       // fallback if user doesn't allow
@@ -55,7 +51,6 @@ export const useDashboard = () => {
     );
   }, []);
 
-  // 🌦️ WEATHER
   useEffect(() => {
     if (!location) return;
 
@@ -79,7 +74,6 @@ export const useDashboard = () => {
     fetchWeather();
   }, [location]);
 
-  // ⚠️ RISK ENGINE
   useEffect(() => {
     if (!weather) return;
 
@@ -126,7 +120,6 @@ export const useDashboard = () => {
         console.log("Backend risk failed → fallback");
       }
 
-      // 🔁 FALLBACK
       const condition = weather.weather?.[0]?.main?.toLowerCase() || "";
 
       let calculatedRisk = 30;
@@ -144,7 +137,6 @@ export const useDashboard = () => {
     return () => clearInterval(interval);
   }, [weather]);
 
-  // 🔢 SMOOTH COUNTER
   useEffect(() => {
     let start = displayRisk;
     const end = risk;
@@ -170,7 +162,6 @@ export const useDashboard = () => {
     return () => clearInterval(timer);
   }, [risk]);
 
-  // 🔘 CLICK
   const handleClick = (path) => {
     clickSound();
     navigate(path);

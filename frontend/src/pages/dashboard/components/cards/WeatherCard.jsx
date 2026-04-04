@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 
 const WeatherCard = ({ weather, loading }) => {
 
-  // 🌡️ TEMP COLOR LOGIC
   const getTempColor = (temp) => {
     if (temp < 15) return "text-blue-400";
     if (temp < 30) return "text-green-400";

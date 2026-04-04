@@ -4,7 +4,6 @@ const { calculateRisk } = require("../services/riskService");
 
 const router = express.Router();
 
-// 🌦️ WEATHER ROUTE
 router.post("/weather", async (req, res) => {
   try {
     const { lat, lon } = req.body;
@@ -32,12 +31,10 @@ router.post("/weather", async (req, res) => {
   }
 });
 
-// ⚠️ REAL RISK ROUTE
 router.get("/risk", async (req, res) => {
   try {
     const { lat, lon } = req.query;
 
-    // 🌦️ WEATHER DATA
     const weatherRes = await axios.get(
       "https://api.openweathermap.org/data/2.5/weather",
       {
@@ -50,7 +47,6 @@ router.get("/risk", async (req, res) => {
       }
     );
 
-    // 🌫️ AQI DATA
     const aqiRes = await axios.get(
       "https://api.openweathermap.org/data/2.5/air_pollution",
       {
@@ -65,10 +61,8 @@ router.get("/risk", async (req, res) => {
     const weather = weatherRes.data;
     const aqi = aqiRes.data.list[0].main.aqi * 50; // scale AQI
 
-    // 🧠 CALCULATE RISK
     const riskScore = calculateRisk(weather, aqi);
 
-    // 📊 HISTORY (mock trend)
     const history = [
       riskScore - 10,
       riskScore - 5,

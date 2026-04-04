@@ -3,14 +3,13 @@ import { styles } from "../../styles/dashboardStyles";
 
 const RiskCard = ({ risk, displayRisk }) => {
 
-  // 🎨 COLOR LOGIC
   const getColor = () => {
-    if (risk < 30) return "#00B8A0";   // green/teal
-    if (risk < 70) return "#F59E0B";   // orange
-    return "#EF4444";                  // red
+    if (risk < 30) return "#00B8A0";
+    if (risk < 70) return "#F59E0B";
+    return "#EF4444";               
   };
 
-  // 🧠 LABEL LOGIC
+
   const getLabel = () => {
     if (risk < 30) return "Low Risk";
     if (risk < 70) return "Moderate Risk";

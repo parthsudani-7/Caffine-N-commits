@@ -10,7 +10,6 @@ import {
 
 const RiskTrendChart = ({ riskHistory }) => {
 
-  // 🔥 convert backend data → chart format
   const data = (riskHistory || []).map((item, index) => ({
     name: `#${index + 1}`,
     amount: item.amount,

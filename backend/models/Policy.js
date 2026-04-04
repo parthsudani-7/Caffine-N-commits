@@ -20,19 +20,16 @@ const policySchema = new mongoose.Schema(
       required: true,
     },
 
-    // 🔹 BASE PRICE (input)
     basePrice: {
       type: Number,
       required: true,
     },
 
-    // 🔹 RISK SCORE (from dashboard)
     riskScore: {
       type: Number,
       required: true,
     },
 
-    // 🔹 FINAL PREMIUM (calculated)
     premium: {
       type: Number,
       required: true,

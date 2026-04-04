@@ -7,7 +7,6 @@ import PageWrapper from "../components/layout/PageWrapper";
 const Landing = ({ direction }) => {
   const navigate = useNavigate();
 
-  // 🔥 CURSOR FOLLOW GLOW
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -23,7 +22,6 @@ const Landing = ({ direction }) => {
     return () => window.removeEventListener("mousemove", move);
   }, []);
 
-  // 🔊 CLICK + VIBRATION
   const handleClick = () => {
     clickSound();
     if (navigator.vibrate) navigator.vibrate(50);

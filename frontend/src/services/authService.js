@@ -1,7 +1,6 @@
 import axios from "axios";
 import API from "@/config/api";
 
-// 🔹 SEND OTP
 export const sendOTP = async (phone) => {
   try {
     const res = await axios.post(`${API}/api/auth/send-otp`, {
@@ -14,8 +13,6 @@ export const sendOTP = async (phone) => {
     return { success: false };
   }
 };
-
-// 🔹 VERIFY OTP
 export const verifyOTP = async (phone, otp) => {
   try {
     const res = await axios.post(`${API}/api/auth/verify-otp`, {

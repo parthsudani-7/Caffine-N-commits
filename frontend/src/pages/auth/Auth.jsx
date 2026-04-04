@@ -13,31 +13,21 @@ function Auth() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 🔥 SAFELY DETERMINE REDIRECT PATH
   const getRedirectPath = () => {
-    // Case 1: ProtectedRoute passed full location object
     if (location.state?.from?.pathname) {
       return location.state.from.pathname;
     }
-
-    // Case 2: manually passed string
     if (typeof location.state?.from === "string") {
       return location.state.from;
     }
-
-    // Default fallback
     return "/dashboard";
   };
 
   const redirectPath = getRedirectPath();
-
-  // ✅ LOGIN / SIGNUP SUCCESS HANDLER
   const handleAuthSuccess = (userData) => {
     if (!userData) return;
 
     console.log("✅ Auth success, redirecting to:", redirectPath);
-
-    // 🔥 DELAY SLIGHTLY to ensure state is updated
     setTimeout(() => {
       navigate(redirectPath, { replace: true });
     }, 50);
@@ -73,7 +63,7 @@ function Auth() {
           >
             <SignupPanel
               {...logic}
-              onSignupSuccess={handleAuthSuccess} // 🔥 ADD THIS
+              onSignupSuccess={handleAuthSuccess} 
             />
           </motion.div>
 

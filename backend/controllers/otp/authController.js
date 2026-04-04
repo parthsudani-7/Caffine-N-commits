@@ -4,7 +4,6 @@ const User = require("../../models/User");
 const otpStore = {};
 const otpRequestTime = {};
 
-// 🔥 SEND OTP
 const sendOtp = async (req, res) => {
   try {
     const { phone, type } = req.body;
@@ -17,14 +16,12 @@ const sendOtp = async (req, res) => {
 
     const user = await User.findOne({ phone });
 
-    // LOGIN FLOW
     if (type === "login" && !user) {
       return res.status(400).json({
         error: "User not found. Please sign up.",
       });
     }
 
-    // SIGNUP FLOW
     if (type === "signup" && user) {
       return res.status(400).json({
         error: "User already exists. Please login.",
@@ -47,7 +44,7 @@ const sendOtp = async (req, res) => {
 
     res.json({
       message: "OTP sent successfully",
-      otp, // demo only
+      otp, 
     });
 
   } catch (error) {
@@ -56,7 +53,6 @@ const sendOtp = async (req, res) => {
   }
 };
 
-// 🔥 VERIFY OTP
 const verifyOtp = async (req, res) => {
   try {
     const { phone, otp, type } = req.body;
@@ -69,7 +65,6 @@ const verifyOtp = async (req, res) => {
 
     let user = await User.findOne({ phone });
 
-    // SIGNUP → CREATE USER
     if (type === "signup" && !user) {
       user = await User.create({
         phone,
@@ -87,7 +82,7 @@ const verifyOtp = async (req, res) => {
       success: true,
       message: "OTP verified",
       user,
-      token, // 🔥 IMPORTANT
+      token, 
     });
 
   } catch (error) {
@@ -114,7 +109,7 @@ const completeProfile = async (req, res) => {
     res.json({ user });
 
   } catch (error) {
-    console.log(error); // 🔥 THIS WILL SHOW ERROR
+    console.log(error); 
     res.status(500).json({ error: "Server error" });
   }
 };

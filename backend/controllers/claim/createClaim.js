@@ -17,14 +17,12 @@ const createClaim = async (req, res) => {
       status: result.status,
     });
 
-    // save notification
     const notification = await createNotification(
       req.user._id,
       `Your claim is ${result.status}: ${result.reason}`,
       "claim"
     );
 
-    // 🔥 send real-time notification
     sendRealTimeNotification(req.user._id, notification);
 
     res.status(201).json({

@@ -1,18 +1,14 @@
 const BASE_URL = "http://localhost:5000/api";
 
-// 🧠 MOCK DATABASE (fallback)
 let users = [];
 
-// 🔐 TOKEN
 const setToken = (token) => localStorage.setItem("token", token);
 const getToken = () => localStorage.getItem("token");
 
-// 🔄 SAFE FETCH (auto fallback)
 const safeFetch = async (url, options, fallback) => {
   try {
     const res = await fetch(url, options);
 
-    // If backend not running
     if (!res.ok) throw new Error("Backend error");
 
     return await res.json();
@@ -22,7 +18,6 @@ const safeFetch = async (url, options, fallback) => {
   }
 };
 
-// 🔥 LOGIN
 export const loginUser = async (phone, password) => {
   return safeFetch(
     `${BASE_URL}/login`,
@@ -48,7 +43,6 @@ export const loginUser = async (phone, password) => {
   );
 };
 
-// 🔥 SIGNUP
 export const signupUser = async (name, phone, password) => {
   return safeFetch(
     `${BASE_URL}/signup`,
@@ -71,7 +65,6 @@ export const signupUser = async (name, phone, password) => {
   );
 };
 
-// 🔒 PROFILE
 export const getProfile = async () => {
   return safeFetch(
     `${BASE_URL}/profile`,

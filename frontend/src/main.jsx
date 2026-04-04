@@ -2,11 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-// ✅ CONTEXTS
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { AppProvider } from "./context/AppContext.jsx";
 
-// ✅ STYLES
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

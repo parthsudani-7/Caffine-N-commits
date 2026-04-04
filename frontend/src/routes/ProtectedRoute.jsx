@@ -5,9 +5,6 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  // =========================
-  // ⏳ WAIT FOR AUTH TO LOAD
-  // =========================
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
@@ -16,9 +13,6 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // =========================
-  // 🔥 FALLBACK CHECK FROM LOCAL STORAGE (IMPORTANT FIX)
-  // =========================
   let storedUser = null;
 
   try {
@@ -30,9 +24,6 @@ const ProtectedRoute = ({ children }) => {
     console.log("❌ Storage parse error:", err);
   }
 
-  // =========================
-  // 🔐 PROTECT ROUTE
-  // =========================
   if (!user && !storedUser) {
     return (
       <Navigate
@@ -43,9 +34,6 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // =========================
-  // ✅ ALLOW ACCESS
-  // =========================
   return children;
 };
 

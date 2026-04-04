@@ -7,11 +7,8 @@ const sendOTP = async (req, res) => {
     if (!phone) {
       return res.status(400).json({ message: "Phone is required" });
     }
-
-    // Fake OTP (for now)
     const otp = "1234";
 
-    // Check if user exists
     let user = await User.findOne({ phone });
 
     if (!user) {
@@ -20,7 +17,7 @@ const sendOTP = async (req, res) => {
 
     res.json({
       message: "OTP sent",
-      otp, // ⚠️ only for testing
+      otp, 
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import alertSound from "@/assets/alert.mp3";
 
-// 🔥 CONTEXT
 import { useApp } from "../../../context/AppContext";
 
 export const useRiskEngine = (weather) => {
@@ -10,10 +9,8 @@ export const useRiskEngine = (weather) => {
   const [riskHistory, setRiskHistory] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
 
-  // 🔥 PREVENT MULTIPLE CLAIM TRIGGERS
   const hasTriggeredRef = useRef(false);
 
-  // 🔥 GLOBAL CONTEXT
   let addHistory = null;
 
   try {
@@ -30,9 +27,6 @@ export const useRiskEngine = (weather) => {
 
     let calculatedRisk = 30;
 
-    // =========================
-    // 🌦️ RISK CALCULATION
-    // =========================
 
     if (condition.includes("rain")) calculatedRisk = 90;
     else if (condition.includes("cloud")) calculatedRisk = 65;
@@ -40,9 +34,6 @@ export const useRiskEngine = (weather) => {
 
     setRisk(calculatedRisk);
 
-    // =========================
-    // 📊 RISK HISTORY
-    // =========================
 
     setRiskHistory((prev) => [
       ...prev.slice(-9),
@@ -51,10 +42,6 @@ export const useRiskEngine = (weather) => {
         risk: calculatedRisk,
       },
     ]);
-
-    // =========================
-    // ⚠️ ALERT SYSTEM
-    // =========================
 
     if (condition.includes("rain")) {
       setAlerts([
@@ -69,10 +56,6 @@ export const useRiskEngine = (weather) => {
 
       setTimeout(() => setShowNotification(false), 4000);
 
-      // =========================
-      // 🔥 AUTO CLAIM TRIGGER
-      // =========================
-
       if (calculatedRisk >= 80 && !hasTriggeredRef.current) {
         hasTriggeredRef.current = true;
 
@@ -83,7 +66,6 @@ export const useRiskEngine = (weather) => {
           });
         }
 
-        // 🔥 EXTRA ALERT (UI FEEL)
         setAlerts([
           "💰 Claim Automatically Triggered",
           "Payout credited based on policy coverage",

@@ -2,9 +2,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { styles } from "../styles/dashboardStyles";
 
 const Notification = ({ show = true, type = "high" }) => {
-  // 🎨 COLOR BASED ON TYPE
+  
   const getColor = () => {
-    if (type === "high") return "#F58A07"; // orange
+    if (type === "high") return "#F58A07"; 
     return "#00B8A0"; // teal
   };
 

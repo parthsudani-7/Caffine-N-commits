@@ -17,7 +17,7 @@ const SignupPanel = ({
   handleSignupSendOTP,
   handleSignupVerifyOTP,
   handleSignup,
-  onSignupSuccess, // 🔥 IMPORTANT PROP
+  onSignupSuccess, 
 }) => {
 
   // 🔥 HANDLE FINAL SIGNUP FLOW
@@ -28,7 +28,7 @@ const SignupPanel = ({
       console.log("SIGNUP RESPONSE:", userData);
 
       if (userData && onSignupSuccess) {
-        onSignupSuccess(userData); // ✅ TRIGGER REDIRECT
+        onSignupSuccess(userData); 
       }
 
     } catch (err) {
@@ -110,7 +110,7 @@ const SignupPanel = ({
           />
 
           <button
-            onClick={handleFinalSignup} // 🔥 FIXED HERE
+            onClick={handleFinalSignup} 
             className="bg-[#F58A07] px-6 py-2 rounded text-black font-semibold hover:scale-105 transition"
           >
             {loading ? "Creating..." : "Sign Up"}

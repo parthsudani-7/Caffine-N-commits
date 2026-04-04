@@ -63,7 +63,6 @@ const Dashboard = ({ direction }) => {
 
         const location = await getUserLocation();
 
-        // ✅ FIXED URLS (REMOVED /api)
         const weatherRes = await axios.post(
           `${API}/dashboard/weather`,
           { lat: location.lat, lon: location.lon },

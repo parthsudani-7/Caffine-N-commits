@@ -3,17 +3,10 @@ import { createContext, useContext, useState } from "react";
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  // =========================
-  // 🔥 POLICY STATE
-  // =========================
 
   const [policy, setPolicy] = useState(null);
   const [risk, setRisk] = useState(0);
   const [history, setHistory] = useState([]);
-
-  // =========================
-  // 🔁 UPDATE RISK
-  // =========================
 
   const updateRisk = (newRisk) => {
     setRisk(newRisk);
@@ -28,11 +21,6 @@ export const AppProvider = ({ children }) => {
       ...prev,
     ]);
   };
-
-  // =========================
-  // 💰 ADD CLAIM
-  // =========================
-
   const addClaim = (amount) => {
     setHistory((prev) => [
       {
@@ -45,10 +33,6 @@ export const AppProvider = ({ children }) => {
     ]);
   };
 
-  // =========================
-  // 🧾 ADD HISTORY ENTRY
-  // =========================
-
   const addHistory = (entry) => {
     setHistory((prev) => [
       {
@@ -60,30 +44,16 @@ export const AppProvider = ({ children }) => {
     ]);
   };
 
-  // =========================
-  // 🎨 RISK COLOR
-  // =========================
-
   const getRiskColor = () => {
     if (risk < 30) return "#00B8A0";
     if (risk < 70) return "#F58A07";
     return "#EF4444";
   };
-
-  // =========================
-  // 🚀 HYDRATE FROM BACKEND
-  // =========================
-
   const hydrateFromAPI = (data) => {
     setPolicy(data?.policy || null);
     setRisk(data?.risk || 0);
     setHistory(data?.history || []);
   };
-
-  // =========================
-  // 🧹 CLEAR STATE
-  // =========================
-
   const clearPolicyData = () => {
     setPolicy(null);
     setRisk(0);
@@ -111,9 +81,5 @@ export const AppProvider = ({ children }) => {
     </AppContext.Provider>
   );
 };
-
-// =========================
-// 🔥 CUSTOM HOOK
-// =========================
 
 export const useApp = () => useContext(AppContext);

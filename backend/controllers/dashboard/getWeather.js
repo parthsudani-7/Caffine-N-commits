@@ -13,7 +13,6 @@ const getWeather = async (req, res) => {
 
     const apiKey = process.env.WEATHER_API;
 
-    // 🔥 CHECK API KEY
     if (!apiKey) {
       console.log("❌ WEATHER_API_KEY missing in .env");
       return res.status(500).json({
@@ -21,7 +20,6 @@ const getWeather = async (req, res) => {
       });
     }
 
-    // 🌦️ API CALL
     const response = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather`,
       {

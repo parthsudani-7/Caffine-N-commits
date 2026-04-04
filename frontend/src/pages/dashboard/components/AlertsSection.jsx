@@ -3,7 +3,6 @@ import { styles } from "../styles/dashboardStyles";
 
 const AlertsSection = ({ alerts }) => {
 
-  // 🎨 ALERT TYPE DETECTION
   const getAlertStyle = (alert) => {
     if (alert.includes("High") || alert.includes("🚨")) {
       return "bg-red-500/20 text-red-400";

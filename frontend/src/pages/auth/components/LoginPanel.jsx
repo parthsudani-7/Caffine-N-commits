@@ -55,7 +55,7 @@ const LoginPanel = ({
           <button
             onClick={async () => {
               try {
-                await handleSendOTP(); // ✅ WAIT for API
+                await handleSendOTP(); 
               } catch (err) {
                 console.error(err);
               }

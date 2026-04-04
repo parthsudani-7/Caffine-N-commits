@@ -5,7 +5,6 @@ import Auth from "../pages/auth/Auth";
 import Register from "../pages/auth/Register";
 import Dashboard from "../pages/dashboard/Dashboard";
 
-// ✅ ADD THESE IMPORTS
 import PolicyManagement from "../pages/policy/PolicyManagement";
 import BuyPolicy from "../pages/policy/BuyPolicy";
 

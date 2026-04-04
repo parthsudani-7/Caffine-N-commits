@@ -2,8 +2,6 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect } from "react";
 
 const GlowBackground = () => {
-
-  // 🔥 CURSOR TRACKING
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 

@@ -24,10 +24,6 @@ const useAuthLogic = () => {
 
   const { login } = useAuth();
 
-  // =========================
-  // 🔐 LOGIN FLOW
-  // =========================
-
   const handleSendOTP = async () => {
     setError("");
 
@@ -79,7 +75,6 @@ const useAuthLogic = () => {
 
       console.log("VERIFY RESPONSE:", data);
 
-      // ✅ IMPORTANT FIX (no dependency on success flag)
       if (data && data.token) {
         const userData = {
           ...data.user,
@@ -100,10 +95,6 @@ const useAuthLogic = () => {
       setLoading(false);
     }
   };
-
-  // =========================
-  // 🆕 SIGNUP FLOW
-  // =========================
 
   const handleSignupSendOTP = async () => {
     setError("");
